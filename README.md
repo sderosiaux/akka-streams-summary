@@ -31,6 +31,13 @@ A Graph is a pipeline. It combines inputs, flows, and outputs.
  - it starts with a Source (Outlet), ends with a Sink (Inlet)
 - It can be stopped anytime using a KillSwitch.
 
+```scala
+// this is a Graph that can be run
+Source.fromFuture(Future { 2 })
+    .via(Flow[Int].map(_ * 2))
+    .to(Sink.foreach(println))
+```
+
 # Flow 
 
 A flow can be 

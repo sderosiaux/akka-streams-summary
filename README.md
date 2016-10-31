@@ -92,6 +92,14 @@ Source.actorPublisher(Props(classOf[Toto])).runForeach(println)
 
 [reactive-kafka](https://github.com/akka/reactive-kafka) === akka-stream-kafka
 
+## Alpakka
+
+Set of connectors useable with Akka Streams:
+
+- HTTP
+- TCP
+- File IO
+
 # Reactive streams: A specification
 
 - Subscriber[A] (Consumer), Publisher[B] (Producer), Subscription, Processor[A, B]
@@ -105,6 +113,8 @@ Some implementations are:
 - Reactor
 - Vert.x
 - Slick
+
+
 
 # Reactive Programming
 

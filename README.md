@@ -40,6 +40,11 @@ A flow can be
 
 A Flow is a Graph.
 
+```scala
+// this is a Flow: Int -> Int
+Flow[Int].map[Int](_ * 2)
+```
+
 # Source
 
 There are a lot of way (syntaxes) to execute a pipeline in Akka Streams.

@@ -76,7 +76,7 @@ Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int
 
 It's possible to bind the Source to a custom Actor.
 akka-streams will send requests asking for `n` elements. The actor can then call `n` times `onNext` (not more or an exception will be thrown):
-```
+```scala
 class Toto extends Actor with ActorPublisher[Char] {
   override def receive = {
     case x @ Request(n) => println(x); (0 until n.toInt).foreach(_ => onNext(Random.nextPrintableChar()))

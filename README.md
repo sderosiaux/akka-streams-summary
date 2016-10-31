@@ -33,8 +33,10 @@ A Graph is a pipeline. It combines inputs, flows, and outputs.
 
 # Flow 
 
-A flow is not always 1 -> 1, it can be 1 -> N: faning out events (Broadcast) or acts as a load balancer (Balance).
-It can also be N -> 1: Merge 1 event of several inputs into 1 event in output; or simply Concat (3 inputs = 3 outputs).
+A flow can be 
+- 1 -> 1
+- 1 -> N: faning out events (Broadcast) or acts as a load balancer (Balance).
+- N -> 1: merge 1 event of several inputs into 1 event in output; or simply Concat (3 inputs = 3 outputs).
 
 A Flow is a Graph.
 

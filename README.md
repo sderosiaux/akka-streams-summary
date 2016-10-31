@@ -36,6 +36,18 @@ A Graph is a pipeline. It combines inputs, flows, and outputs.
 Source.fromFuture(Future { 2 })
     .via(Flow[Int].map(_ * 2))
     .to(Sink.foreach(println))
+    
+// this is the same with the full DSL
+val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
+    implicit builder =>
+      val source = builder.add(Source.fromFuture(Future { 2 }))
+      val multiply = builder.add(Flow[Int].map(_ * 2))
+      val sink = builder.add(Sink.foreach(println))
+
+      import GraphDSL.Implicits._
+      source ~> multiply ~> sink
+      ClosedShape
+  })
 ```
 
 # Flow 

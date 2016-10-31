@@ -42,7 +42,7 @@ A Flow is a Graph.
 
 ```scala
 // this is a Flow: Int -> Int
-Flow[Int].map[Int](_ * 2)
+Flow[Int].map(_ * 2)
 ```
 
 # Source

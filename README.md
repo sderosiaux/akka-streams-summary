@@ -50,7 +50,7 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
   })
 ```
 
-# Flow 
+## Flow 
 
 A flow can be 
 - 1 -> 1
@@ -64,7 +64,7 @@ A Flow is a Graph.
 Flow[Int].map(_ * 2)
 ```
 
-# Source
+## Source
 
 There are a lot of way (syntaxes) to execute a pipeline in Akka Streams.
 For instance, a Source can be ran without Graph, without Flow (it's created underneath):
@@ -73,7 +73,7 @@ Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int
 FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 ```
 
-# Using Actors
+## Using Actors
 
 It's possible to bind the Source to a custom Actor.
 akka-streams will send requests asking for `n` elements. The actor can then call `n` times `onNext` (not more or an exception will be thrown):
@@ -88,6 +88,9 @@ class Toto extends Actor with ActorPublisher[Char] {
 Source.actorPublisher(Props(classOf[Toto])).runForeach(println)
 ```
 
+## Kafka
+
+[reactive-kafka](https://github.com/akka/reactive-kafka) === akka-stream-kafka
 
 # Reactive streams: A specification
 

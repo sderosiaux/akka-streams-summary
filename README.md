@@ -23,17 +23,20 @@ A Shape is a "box" with inputs and outputs, something that "processes" messages.
 
 ## Graph
 
+A Graph is a pipeline. It combines inputs, flows, and outputs.
+
 - ActorMaterializer: AkkaStreams specific. Provisions actors to execute a pipeline (a Graph)
 - ActorMaterializerSettings: ActorMaterializer ... settings. Can have a custom supervision strategy (if exception, Resume, Restart, or Stop), can add logging, can configure thresholds..
 - RunnableGraph: A graph is a whole set of Outlet/FlowShape/Inlet linked together.
  - it starts with a Source (Outlet), ends with a Sink (Inlet)
-
-A graph can be stopped anytime using a KillSwitch.
+- It can be stopped anytime using a KillSwitch.
 
 # Flow 
 
 A flow is not always 1 -> 1, it can be 1 -> N: faning out events (Broadcast) or acts as a load balancer (Balance).
 It can also be N -> 1: Merge 1 event of several inputs into 1 event in output; or simply Concat (3 inputs = 3 outputs).
+
+A Flow is a Graph.
 
 # Source
 

@@ -10,6 +10,8 @@ In akka-streams, we have also these abstractions:
 - Outlet[T] related to a Source[T]: .out on the Source
 - Inlet[T] related to a Sink[T]: .in on the Sink
 
+## Shapes
+
 A Shape is a "box" with inputs and outputs, something that "processes" messages. There are some specific kind of shapes:
 
 - Shape: blackbox without inputs (inlets), and outputs (outlets)
@@ -19,11 +21,14 @@ A Shape is a "box" with inputs and outputs, something that "processes" messages.
 - SinkShape: Shape with 1 output only
 - BibiShape: Shape with 2 inputs, 2 outputs
 
+## Graph
 
 - ActorMaterializer: AkkaStreams specific. Provisions actors to execute a pipeline (a Graph)
 - ActorMaterializerSettings: ActorMaterializer ... settings. Can have a custom supervision strategy (if exception, Resume, Restart, or Stop), can add logging, can configure thresholds..
 - RunnableGraph: A graph is a whole set of Outlet/FlowShape/Inlet linked together.
  - it starts with a Source (Outlet), ends with a Sink (Inlet)
+
+A graph can be stopped anytime using a KillSwitch.
 
 # Flow 
 

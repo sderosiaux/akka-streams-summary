@@ -67,9 +67,10 @@ Flow[Int].map(_ * 2)
 # Source
 
 There are a lot of way (syntaxes) to execute a pipeline in Akka Streams.
-For instance, a Source can be ran without Graph, without Flow:
+For instance, a Source can be ran without Graph, without Flow (it's created underneath):
 ```scala
 Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int]
+FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 ```
 
 # Using Actors

@@ -1,9 +1,9 @@
 # Akka Streams: A stream processing library
 
 As any streaming library, we have the concept of
-- Source: create messages
-- Channel (more globally, Shape here): messages pass through
-- Sink: output messages somewhere else (Note: it exists a Sink.ignore to output to a black-hole)
+- Source (input): create messages
+- Channel (flow/stage) (more globally, Shape here): messages pass through
+- Sink (output): output messages somewhere else (Note: it exists a Sink.ignore to output to a black-hole)
 
 In akka-streams, we have also these abstractions:
 
@@ -73,6 +73,10 @@ Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int
 FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 ```
 
+## Composition
+
+We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flows => 1x flow
+
 ## Using Actors
 
 It's possible to bind the Source to a custom Actor.
@@ -106,6 +110,7 @@ Set of connectors useable with Akka Streams:
 - asynchronous boundary: decouple components
 - define backpressure model: signal to the source to handle
 - push AND pull: fast consumer AND slow consumer (dynamic)
+- ability to batch process
 
 Some implementations are:
 - RxJava

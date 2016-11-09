@@ -21,7 +21,7 @@ A Shape is a "box" with inputs and outputs, something that "processes" messages.
 - `BidiShape`: 2 <-> 2 (1 --> 1 with 1 <-- 1, bidirectional)
 - `FanOutShape`: 1 --> N (typically a Broadcast)
 - `FanInShape`: N --> 1 (typically a Merge)
-- `CloseShape`: Shape with closed inputs and closed outputs (can be materialized)
+- `ClosedShape`: Shape with closed inputs and closed outputs that can be materialized (executed). It's just the combinaison of other shapes. Typically, it's a RunnableGraph.
 
 Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new SourceShape.
 

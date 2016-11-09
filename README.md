@@ -27,13 +27,15 @@ Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new
 
 ## Graph
 
-A Graph is a pipeline. It combines inputs, flows, and outputs.
+A `Graph` is the tiniest Unit in Akka Streams. Everything is a graph. Every graph has a shape (which contains in/out ports).
+A `Graph` can combines inputs (sources), flows, or outputs (sinks).
+A `Graph` can be partial (still exposing opened inputs or outputs) or closed (self-sufficient graph, no input, no output).
 
-- ActorMaterializer: AkkaStreams specific. Provisions actors to execute a pipeline (a Graph)
-- ActorMaterializerSettings: ActorMaterializer ... settings. Can have a custom supervision strategy (if exception, Resume, Restart, or Stop), can add logging, can configure thresholds..
-- RunnableGraph: A graph is a whole set of Outlet/FlowShape/Inlet linked together.
- - it starts with a Source (Outlet), ends with a Sink (Inlet)
-- It can be stopped anytime using a KillSwitch.
+- `ActorMaterializer`: Akka Streams specific. Provisions actors to execute a pipeline (a Graph)
+- `ActorMaterializerSetting`s: ActorMaterializer ... settings. Can have a custom supervision strategy (if exception, Resume, Restart, or Stop), can add logging, can configure thresholds..
+- `RunnableGraph`: A graph is a whole set of Outlet/FlowShape/Inlet linked together, that is closed.
+ - it starts with a Source (using its Outlet), ends with a Sink (using its Inlet)
+- It can be stopped anytime using a `KillSwitch`.
 
 ```scala
 // this is a Graph that can be run
@@ -52,6 +54,24 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
       source ~> multiply ~> sink
       ClosedShape
   })
+```
+
+Here, a Graph that is not closed, not runnable. It just provides an abstraction and create a simple `Graph` containing a `Flow` shape, that simply acts as a diamond internally:
+```scala
+val diamond: Graph[FlowShape[Int, Int], NotUsed] = GraphDSL.create() { implicit builder =>
+  val split = builder.add(Balance[Int](2))
+  val merge = builder.add(Merge[Int](2))
+  split ~> merge
+  split ~> merge
+  FlowShape(split.in, merge.out)
+}
+```
+
+To make it useful, we need to create a `Flow` from it, then we can use it as any flow:
+```scala
+val diamondGraph: Flow[Int, Int, NotUsed] = Flow.fromGraph(diamond)
+Source.single(5).via(diamondGraph).runForeach(println)
+// Outputs "5"
 ```
 
 ### Waiting for a RunnableGraph to end

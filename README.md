@@ -58,6 +58,10 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
   })
 ```
 
+We are using the GraphDSL of Akka Streams to define the graph. Sometimes, it's overkilled, when you have a linear flow of data where you could just use the standard `.map` `.filter` and so on.
+
+When the graph is not linear (broadcasting, merging..) then the GraphDSL is nice to use.
+
 ## Partial Graphs
 
 Here, a Graph that is not closed, not runnable. It just provides an abstraction and create a simple `Graph` containing a `Flow` shape, that simply acts as a diamond internally:
@@ -129,7 +133,6 @@ For instance, a Source can be ran without Graph, without Flow (it's created unde
 Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int]
 FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 ```
-
 
 ## Composition
 

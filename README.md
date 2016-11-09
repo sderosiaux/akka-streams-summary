@@ -138,6 +138,24 @@ That will output something like:
 [DEBUG] [11/09/2016 15:40:17.027] [default-akka.actor.default-dispatcher-7] [akka.stream.Log(akka://default/user/StreamSupervisor-0)] [my flow] Element: Hello
 ```
 
+You can also get the blueprint of any Shape with `toString`. Better give a name to your components.
+```scala
+println(Source.single(0).map(_ * 2).named("my source"))
+/*
+Source(SourceShape(Map.out), CompositeModule [3232a28a]
+  Name: nestedSource
+  Modules:
+    (singleSource) GraphStage(SingleSource(0)) [4229bb3f]
+    (unnamed) [56cdfb3b] copy of GraphStage(Map(<function1>)) [2b91004a]
+  Downstreams: 
+    single.out -> Map.in
+  Upstreams: 
+    Map.in -> single.out
+  MatValue: Atomic(singleSource[4229bb3f]))
+*/
+```
+We can see everything: the flows, the upstreams/downstreams and the materialized value.
+
 ## Kafka
 
 [reactive-kafka](https://github.com/akka/reactive-kafka) === akka-stream-kafka

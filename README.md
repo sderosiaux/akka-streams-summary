@@ -82,7 +82,7 @@ Source.single(5).via(diamondGraph).runForeach(println)
 
 A Graph can contains (ie: the builder can return..) any type of Shape we already talk about: `SourceShape`, `SinkShape` etc. It's just an abstraction using multiple Shapes internally.
 
-For instance, a Source that just expose random numbers:
+For instance, a Source that just expose random numbers (it's useless in this case, but just for demo purpose):
 ```
 val s = GraphDSL.create() { implicit builder =>
    val flow = builder.add(Flow[Double].map(identity)) // look the note below
@@ -92,7 +92,7 @@ val s = GraphDSL.create() { implicit builder =>
 }
 Source.fromGraph(s).runForeach(println)
 ```
-> Note that I create a dummy flow because I couldn't return the original source shape: `UnsupportedOperationException: cannot replace the shape of the EmptyModule`
+> Note that I create a dummy flow because I couldn't return the original source shape: `UnsupportedOperationException: cannot replace the shape of the EmptyModule` (it's not supported because it's stupid! `Source.fromIterator` is already doing the job)
 
 ### Waiting for a RunnableGraph to end
 

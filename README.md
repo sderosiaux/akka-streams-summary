@@ -145,7 +145,7 @@ We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flow
 Each shape provides a materialized value (it's a different concept than the output ports). This is something else and is unique for each shape. Often you will see `NotUsed` in the types of your shapes, this is one materialized value: a not used one (sic!).
 
 For instance:
-```
+```scala
 // the output is a Int
 // the materialized value is a NotUsed, meaning nothing useable
 val a: Source[Int, NotUsed] = Source.single(4)
@@ -178,7 +178,7 @@ For Sink:
 The simple methods of Akka Streams deal with it without us to know.
 
 For instance:
-```
+```scala
 val s: Source[Int, NotUsed] = Source.single(4)
 
 // we have some control over the materialized value
@@ -215,7 +215,7 @@ done? Done
 */
 ```
 
-Another example with a list that is "split" element per element using `mapConcat`:
+Another example with a list that is "split" element by element using `mapConcat`:
 ```scala
   val (promise, doneFuture) = Source.maybe[List[Int]]
     .mapConcat(identity)

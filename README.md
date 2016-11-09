@@ -321,6 +321,7 @@ Set of connectors useable with Akka Streams:
 - define backpressure model: signal to the source to handle
 - push AND pull: fast consumer AND slow consumer (dynamic)
 - ability to batch process
+- null is not a valid value in the streams
 
 Some implementations are:
 - RxJava

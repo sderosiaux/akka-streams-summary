@@ -119,6 +119,24 @@ Several stages shares the same thread, except if you explicitely specified async
 .via(flow).async // asynchronous boundary
 ```
 
+## Logging
+
+We always want to know what's in the pipes. Instead of adding `println` everywhere, Akka Streams has a pluggable facility:
+
+```
+.via(processingStage).log("my flow")
+```
+It's using the DEBUG level, so make sure to adapt your configuration:
+```
+akka {
+  loglevel = "DEBUG"
+}
+```
+
+That will output something like:
+```
+[DEBUG] [11/09/2016 15:40:17.027] [default-akka.actor.default-dispatcher-7] [akka.stream.Log(akka://default/user/StreamSupervisor-0)] [my flow] Element: Hello
+```
 
 ## Kafka
 

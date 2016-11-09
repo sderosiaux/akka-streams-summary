@@ -215,6 +215,27 @@ done? Done
 */
 ```
 
+Another example with a list that is "split" element per element using `mapConcat`:
+```scala
+  val (promise, doneFuture) = Source.maybe[List[Int]]
+    .mapConcat(identity)
+    .scan(0)(_ + _)
+    .log("presink")
+    .toMat(Sink.ignore)(Keep.both)
+    .run()
+  promise.success(Some(List(1, 2, 3, 4, 5)))
+  doneFuture.foreach(x => { system.terminate() })
+/* Output:
+[presink] Element: 0
+[presink] Element: 1
+[presink] Element: 3
+[presink] Element: 6
+[presink] Element: 10
+[presink] Element: 15
+[presink] Upstream finished.
+*/
+```
+
 ## Using Actors
 
 It's possible to bind the Source to a custom Actor.

@@ -2,13 +2,8 @@
 
 As any streaming library, we have the concept of
 - Source (input): create messages
-- Channel (flow/stage) (more globally, Shape here): messages pass through
+- Channel (flow/stage): messages passing through
 - Sink (output): output messages somewhere else (Note: it exists a Sink.ignore to output to a black-hole)
-
-In akka-streams, we have also these abstractions:
-
-- Outlet[T] related to a Source[T]: .out on the Source
-- Inlet[T] related to a Sink[T]: .in on the Sink
 
 ## Shapes
 
@@ -24,6 +19,11 @@ A Shape is a "box" with inputs and outputs, something that "processes" messages.
 - `ClosedShape`: Shape with closed inputs and closed outputs that can be materialized (executed). It's just the combinaison of other shapes. Typically, it's a RunnableGraph.
 
 Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new SourceShape.
+
+In akka-streams, we have also these abstractions that represents the input/output "ports" on the shapes:
+
+- `Outlet[T]` for any shape that has outputs (`.out` or `.out(n: Int)`)
+- `Inlet[T]` for any shape that has inputs (`.in` or `.in(n: Int)`)
 
 ## Graph
 

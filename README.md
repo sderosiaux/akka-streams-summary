@@ -1,3 +1,5 @@
+> 2016-11-09: Work In Progress
+
 # Akka Streams: A stream processing library
 
 As any streaming library, we have the concept of
@@ -153,13 +155,17 @@ val a: Source[Int, NotUsed] = Source.single(4)
 val a: Source[Int, Promise[Option[Int]]] = Source.maybe[Int]
 ```
 
-Here is the list of the Source and Sink methods that have a materialized value different than `NotUsed`:
+Here is the list of the Source and Sink methods that have a materialized value different than `NotUsed`.
+
+For Source:
 
 - Source.queue: SourceQueueWithComplete[T]
 - Source.tick: Cancellable
 - Source.maybe: Promise[Option[T]]
 - Source.asSubscriber: Subscriber[T]
 - Source.[actorPublisher|actorRef]: ActorRef
+
+For Sink: 
 
 - Sink.[ignore|foreach|foreachParallel]: Future[Done]
 - Sink.[head|last|fold|foldAsync|reduce|lazyInit]: Future[T]
@@ -177,8 +183,13 @@ val s: Source[Int, NotUsed] = Source.single(4)
 
 // we have some control over the materialized value
 val classic: Source[Int, NotUsed] = s.via(f)
-val left: Source[Int, NotUsed] = s.viaMat(f)(Keep.left) // equivalent to .via
+val left: Source[Int, NotUsed] = s.viaMat(f)(Keep.left) // same as .via
 val both: Source[Int, (NotUsed, NotUsed)] = s.viaMat(f)(Keep.both)
+
+// notice here the impact of the source materialized value type (Promise[Option[Int]])
+val classic: Source[Int, Promise[Option[Int]]] = ss.via(f)
+val left: Source[Int, Promise[Option[Int]]] = ss.viaMat(f)(Keep.left) // same as .via
+val right: Source[Int, NotUsed] = ss.viaMat(f)(Keep.right)
 ```
 
 Question: what can we do with the materialized value? (when it's not NotUsed!)

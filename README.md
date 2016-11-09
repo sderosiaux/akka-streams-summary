@@ -14,12 +14,14 @@ In akka-streams, we have also these abstractions:
 
 A Shape is a "box" with inputs and outputs, something that "processes" messages. There are some specific kind of shapes:
 
+- SourceShape: Shape with 1 input only (a Source has a SourceShape)
+- SinkShape: Shape with 1 output only (a Sink has a SinkShape)
 - Shape: blackbox without inputs (inlets), and outputs (outlets)
 - CloseShape: Shape with closed inputs and closed outputs (can be materialized)
-- SourceShape: Shape with 1 input only
 - FlowShape: Shape with 1 input, 1 output
-- SinkShape: Shape with 1 output only
 - BibiShape: Shape with 2 inputs, 2 outputs
+
+Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new SourceShape.
 
 ## Graph
 
@@ -50,6 +52,19 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
   })
 ```
 
+### Waiting for a RunnableGraph to end
+
+You can get a Future from a Graph only using specific syntax:
+
+```scala
+val foo: Future[Done] = Source.single("Hello").runWith(Sink.foreach(println))) // we can subscribe to the future: .onComplete(...)
+```
+With this syntax, you wouldn't get a Future:
+```
+val foo: NotUsed = Source.single("Hello").runWith(Sink.foreach(println))).to(Sink.foreach(println)).run()
+```
+
+
 ## Flow 
 
 A flow can be 
@@ -73,6 +88,7 @@ Source(0 to 5).map(100 * _).runWith(Sink.fold(0)(_ + _)) // returns a Future[Int
 FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 ```
 
+
 ## Composition
 
 We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flows => 1x flow
@@ -91,6 +107,16 @@ class Toto extends Actor with ActorPublisher[Char] {
 
 Source.actorPublisher(Props(classOf[Toto])).runForeach(println)
 ```
+
+## Threading
+
+A stream does not run on the caller thread. It uses a thread pool provided by a Materializer.
+ 
+Several stages shares the same thread, except if you explicitely specified async boundaries to make them run concurrently (but still properly ordered to the sink):
+```
+.via(flow).async // asynchronous boundary
+```
+
 
 ## Kafka
 

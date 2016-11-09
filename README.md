@@ -19,7 +19,7 @@ A Shape is a "box" with inputs and outputs, something that "processes" messages.
 - Shape: blackbox without inputs (inlets), and outputs (outlets)
 - CloseShape: Shape with closed inputs and closed outputs (can be materialized)
 - FlowShape: Shape with 1 input, 1 output
-- BibiShape: Shape with 2 inputs, 2 outputs
+- BidiShape: Shape with 2 inputs, 2 outputs (bidirectional)
 
 Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new SourceShape.
 

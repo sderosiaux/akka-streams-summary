@@ -83,7 +83,7 @@ Source.single(5).via(diamondGraph).runForeach(println)
 A Graph can contains (ie: the builder can return..) any type of Shape we already talk about: `SourceShape`, `SinkShape` etc. It's just an abstraction using multiple Shapes internally.
 
 For instance, a Source that just expose random numbers (it's useless in this case, but just for demo purpose):
-```
+```scala
 val s = GraphDSL.create() { implicit builder =>
    val flow = builder.add(Flow[Double].map(identity)) // look the note below
    val ss = Source.fromIterator(() => Iterator.continually(math.random))

@@ -159,11 +159,11 @@ Here is the list of the Source and Sink methods that have a materialized value d
 - Source.tick: Cancellable
 - Source.maybe: Promise[Option[T]]
 - Source.asSubscriber: Subscriber[T]
-- Source.actorPublisher|actorRef: ActorRef
+- Source.[actorPublisher|actorRef]: ActorRef
 
-- Sink.ignore|foreach|foreachParallel: Future[Done]
-- Sink.head|last|fold|foldAsync|reduce|lazyInit: Future[T]
-- Sink.headOption|lastOption: Future[Option[T]]
+- Sink.[ignore|foreach|foreachParallel]: Future[Done]
+- Sink.[head|last|fold|foldAsync|reduce|lazyInit]: Future[T]
+- Sink.[headOption|lastOption]: Future[Option[T]]
 - Sink.seq: Future[Seq[T]]
 - Sink.asPublisher: Publisher[T]
 - Sink.actorSubscriber: ActorRef

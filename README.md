@@ -37,6 +37,8 @@ A `Graph` can be partial (still exposing opened inputs or outputs) or closed (se
  - it starts with a Source (using its Outlet), ends with a Sink (using its Inlet)
 - It can be stopped anytime using a `KillSwitch`.
 
+## Closed Graphs
+
 ```scala
 // this is a Graph that can be run
 Source.fromFuture(Future { 2 })
@@ -56,6 +58,8 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
   })
 ```
 
+## Partial Graphs
+
 Here, a Graph that is not closed, not runnable. It just provides an abstraction and create a simple `Graph` containing a `Flow` shape, that simply acts as a diamond internally:
 ```scala
 val diamond: Graph[FlowShape[Int, Int], NotUsed] = GraphDSL.create() { implicit builder =>
@@ -73,6 +77,9 @@ val diamondGraph: Flow[Int, Int, NotUsed] = Flow.fromGraph(diamond)
 Source.single(5).via(diamondGraph).runForeach(println)
 // Outputs "5"
 ```
+
+A Graph can contains (ie: the builder can return..) any type of Shape we already talk about: `SourceShape`, `SinkShape` etc. It's just an abstraction using multiple Shapes internally.
+
 
 ### Waiting for a RunnableGraph to end
 

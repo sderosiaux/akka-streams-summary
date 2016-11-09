@@ -15,10 +15,10 @@ In akka-streams, we have also these abstractions:
 A Shape is a "box" with inputs and outputs, something that "processes" messages. There are some specific kind of shapes:
 
 - `Shape`: the top abstract class for any shape. Contains a empty list of inputs (inlets, which are the input "ports"), and outputs (outlets, which are the output "ports")
-- `SourceShape`: 1 --> (a Source has a SourceShape)
-- `SinkShape`: --> 1 output only (a Sink has a SinkShape)
+- `SourceShape`: 1 --> N (a Source has a SourceShape)
+- `SinkShape`: N --> 1 output only (a Sink has a SinkShape)
 - `FlowShape`: 1 --> 1
-- `BidiShape`: 2 --> 2 (bidirectional)
+- `BidiShape`: 2 <-> 2 (1 --> 1 with 1 <-- 1, bidirectional)
 - `CloseShape`: Shape with closed inputs and closed outputs (can be materialized)
 
 Combining shapes give another shape. ie: a SourceShape + a FlowShape gives a new SourceShape.

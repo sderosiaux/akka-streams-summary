@@ -57,13 +57,13 @@ val g: RunnableGraph[_] = RunnableGraph.fromGraph(GraphDSL.create() {
 You can get a Future from a Graph only using specific syntax:
 
 ```scala
-val foo: Future[Done] = Source.single("Hello").runWith(Sink.foreach(println))) // we can subscribe to the future: .onComplete(...)
+// we can subscribe to the future: .onComplete(...)
+val foo: Future[Done] = Source.single("Hello").runWith(Sink.foreach(println)))
 ```
 With this syntax, you wouldn't get a Future:
-```
+```scala
 val foo: NotUsed = Source.single("Hello").runWith(Sink.foreach(println))).to(Sink.foreach(println)).run()
 ```
-
 
 ## Flow 
 

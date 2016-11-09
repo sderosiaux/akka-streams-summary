@@ -215,7 +215,7 @@ done? Done
 */
 ```
 
-Another example with a list that is "split" element by element using `mapConcat`:
+Another example with a list that is "split" element by element using `mapConcat` and `scan` (it's like reduce/fold but it emits each intermediate value):
 ```scala
   val (promise, doneFuture) = Source.maybe[List[Int]]
     .mapConcat(identity)

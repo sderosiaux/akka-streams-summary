@@ -92,7 +92,7 @@ val s = GraphDSL.create() { implicit builder =>
 }
 Source.fromGraph(s).runForeach(println)
 ```
-> Note that I didn't found out how to return the original source directly without using a identity Flow. Returning the source itself or its input port is not supported: `UnsupportedOperationException: cannot replace the shape of the EmptyModule`
+> Note that I create a dummy flow because I couldn't return the original source shape: `UnsupportedOperationException: cannot replace the shape of the EmptyModule`
 
 ### Waiting for a RunnableGraph to end
 

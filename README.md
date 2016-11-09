@@ -138,6 +138,53 @@ FileIO.fromPath(Paths.get("log.txt")).runFold(0)(_ + _.length).foreach(println)
 
 We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flows => 1x flow
 
+## Materialized value
+
+Each shape provides a materialized value. This is a additional feature to the output ports, this is something else and is unique for each shape. Often you will see `NotUsed` in the types of your shapes, this is one materialized value: a not used one (sic!).
+
+For instance:
+```
+// the output is a Int
+// the materialized value is a NotUsed, meaning nothing useable
+val a: Source[Int, NotUsed] = Source.single(4)
+
+// the output is a Int
+// the materialized value is a Promise[Option[Int]]
+val a: Source[Int, Promise[Option[Int]]] = Source.maybe[Int]
+```
+
+Here is the list of the Source and Sink methods that have a materialized value different than `NotUsed`:
+
+- Source.queue: SourceQueueWithComplete[T]
+- Source.tick: Cancellable
+- Source.maybe: Promise[Option[T]]
+- Source.asSubscriber: Subscriber[T]
+- Source.actorPublisher|actorRef: ActorRef
+
+- Sink.ignore|foreach|foreachParallel: Future[Done]
+- Sink.head|last|fold|foldAsync|reduce|lazyInit: Future[T]
+- Sink.headOption|lastOption: Future[Option[T]]
+- Sink.seq: Future[Seq[T]]
+- Sink.asPublisher: Publisher[T]
+- Sink.actorSubscriber: ActorRef
+- Sink.queue: SinkQueueWithCancel[T]
+
+The simple methods of Akka Streams deal with it without us to know.
+
+For instance:
+```
+val s: Source[Int, NotUsed] = Source.single(4)
+
+// we have some control over the materialized value
+val classic: Source[Int, NotUsed] = s.via(f)
+val left: Source[Int, NotUsed] = s.viaMat(f)(Keep.left) // equivalent to .via
+val both: Source[Int, (NotUsed, NotUsed)] = s.viaMat(f)(Keep.both)
+```
+
+Question: what can we do with the materialized value? (when it's not NotUsed!)
+Answer: 
+
+
 ## Using Actors
 
 It's possible to bind the Source to a custom Actor.
@@ -198,6 +245,11 @@ Source(SourceShape(Map.out), CompositeModule [3232a28a]
 */
 ```
 We can see everything: the flows, the upstreams/downstreams and the materialized value.
+
+## TODO
+
+- Processor
+- Backpressure
 
 ## Kafka
 

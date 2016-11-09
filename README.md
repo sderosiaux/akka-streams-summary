@@ -142,7 +142,7 @@ We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flow
 
 ## Materialized value
 
-Each shape provides a materialized value. This is a additional feature to the output ports, this is something else and is unique for each shape. Often you will see `NotUsed` in the types of your shapes, this is one materialized value: a not used one (sic!).
+Each shape provides a materialized value (it's a different concept than the output ports). This is something else and is unique for each shape. Often you will see `NotUsed` in the types of your shapes, this is one materialized value: a not used one (sic!).
 
 For instance:
 ```
@@ -193,8 +193,27 @@ val right: Source[Int, NotUsed] = ss.viaMat(f)(Keep.right)
 ```
 
 Question: what can we do with the materialized value? (when it's not NotUsed!)
-Answer: 
+Answer: it's used to have a "hand" into a closed graph.
 
+For instance, here, we run a closed graph and we provide data to the source using the materialized value coming from the `RunnableGraph`!
+```scala
+val source: Source[Int, Promise[Option[Int]]] = Source.maybe[Int].log("source")
+val map = Flow[Int].map(_ * 2).log("map")
+val graph = source.via(map).log("before sink").toMat(Sink.ignore)(Keep.both)
+val (promise, doneFuture) = graph.run()
+doneFuture.foreach(x => { println(s"done? $x"); system.terminate() })
+
+promise.success(Some(5)) // send a value into the source!
+/* Output:
+[source] Element: 5
+[map] Element: 10
+[before sink] Element: 10
+done? Done
+[source] Upstream finished.
+[map] Upstream finished.
+[before sink] Upstream finished.
+*/
+```
 
 ## Using Actors
 

@@ -71,6 +71,8 @@ val diamond: Graph[FlowShape[Int, Int], NotUsed] = GraphDSL.create() { implicit 
 }
 ```
 
+> Notice the 2 links between split and merge (each has 2 ports). Akka Streams is smart, and will crash if you forget to link your stuff : `java.lang.IllegalArgumentException: requirement failed: The inlets [Balance.in] and outlets [Merge.out] must correspond to the inlets [Balance.in, Merge.in1] and outlets [Balance.out1, Merge.out]`
+
 To make it useful, we need to create a `Flow` from it, then we can use it as any flow:
 ```scala
 val diamondGraph: Flow[Int, Int, NotUsed] = Flow.fromGraph(diamond)

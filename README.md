@@ -144,6 +144,8 @@ We can compose anything using `.via`, like a (source+flow) => 1x source, 2x flow
 
 Each shape provides a materialized value (it's a different concept than the output ports). This is something else and is unique for each shape. Often you will see `NotUsed` in the types of your shapes, this is one materialized value: a not used one (sic!).
 
+A materialized value IS the result of a RunnableGraph (a sink has not output).
+
 For instance:
 ```scala
 // the output is a Int

@@ -235,6 +235,16 @@ Another example with a list that is "split" element by element using `mapConcat`
 [presink] Upstream finished.
 */
 ```
+We can also use a queue to provide data:
+```scala
+val (queue, doneFuture) = Source.queue[Int](2, OverflowStrategy.backpressure)
+            .log("pre sink")
+            .toMat(Sink.ignore)(Keep.both)
+            .run()
+doneFuture.foreach(_ => { system.terminate() })
+(1 to 10).foreach(queue.offer)
+queue.complete()
+```
 
 ## Using Actors
 

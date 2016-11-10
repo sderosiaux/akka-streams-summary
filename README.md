@@ -311,8 +311,11 @@ We can see everything: the flows, the upstreams/downstreams and the materialized
 
 ## TODO
 
-- Processor
-- Backpressure
+- Processor (from reactivestreams)
+- Demonstrate Backpressure
+- attributes on a Graph: like async() and named("foo")
+- we can also control the logLevel of the stage events (on element, on finish, on failure; when using .log("here"))
+- we can also control the inputbuffer of a graph (default is 1 item max)
 
 ## Kafka
 

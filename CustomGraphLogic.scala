@@ -25,22 +25,6 @@ object TestCustomStage extends App {
   Vector(24, 34)
   Vector(30)
   */
-
-  // In a test, there is a testing Sink: TestSink
-  val test: (SourceQueueWithComplete[Int], Probe[Seq[Int]]) = Source.queue[Int](100, OverflowStrategy.backpressure)
-    .via(new CustomCustomStage(i => i % 10)).toMat(TestSink.probe)(Keep.both)
-    .run()
-
-  test._1.offer(10)
-  test._1.offer(10)
-  test._1.offer(20)
-  test._1.offer(24)
-  test._1.offer(34)
-  test._1.offer(30)
-  test._1.complete()
-
-  test._2.expectNext
-
 }
 
 class CustomCustomStage[T, U](lens: T => U) extends GraphStage[FlowShape[T, Seq[T]]]{
@@ -120,7 +104,7 @@ class CustomCustomStage[T, U](lens: T => U) extends GraphStage[FlowShape[T, Seq[
 
 
 class CustomCustomStageTest extends FlatSpec with Matchers {
-    "my test" should "work" in {
+    "my test" should "work with the TestSink" in {
       implicit val system = ActorSystem("test")
       implicit val mat = ActorMaterializer()
 
@@ -136,5 +120,23 @@ class CustomCustomStageTest extends FlatSpec with Matchers {
       value._2.expectNext(Vector(10, 10, 20))
       value._2.expectNext(Vector(24, 34), Vector(30))
       value._2.expectComplete()
+    }
+  
+  "my test" should "work with Actors!" in {
+      implicit val system = ActorSystem("test")
+      implicit val mat = ActorMaterializer()
+
+      val probe = TestProbe()
+      val queue = Source.queue[Int](100, OverflowStrategy.backpressure)
+        .via(new CustomCustomStage(i => i % 10)).to(Sink.actorRef(probe.ref, "done!"))
+        .run()
+
+      List(10, 10, 20, 24, 34, 30).foreach(queue.offer)
+      queue.complete()
+
+      probe.expectMsg(Vector(10, 10, 20))
+      probe.expectMsg(Vector(24, 34))
+      probe.expectMsg(Vector(30))
+      probe.expectMsg("done!")
     }
 }

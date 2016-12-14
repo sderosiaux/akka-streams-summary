@@ -345,7 +345,7 @@ Some implementations are:
 - Vert.x
 - Slick
 - [netty-reactive-streams](https://github.com/playframework/netty-reactive-streams)
-
+- http://reactivesocket.io/
 
 # Reactive Programming
 

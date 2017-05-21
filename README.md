@@ -344,6 +344,7 @@ Some implementations are:
 - Reactor
 - Vert.x
 - Slick
+- Monix
 - [netty-reactive-streams](https://github.com/playframework/netty-reactive-streams)
 - http://reactivesocket.io/
 

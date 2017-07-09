@@ -71,6 +71,8 @@ Here, a Graph that is not closed, not runnable. It just provides an abstraction 
 val diamond: Graph[FlowShape[Int, Int], NotUsed] = GraphDSL.create() { implicit builder =>
   val split = builder.add(Balance[Int](2))
   val merge = builder.add(Merge[Int](2))
+  
+  import GraphDSL.Implicits._
   split ~> merge
   split ~> merge
   FlowShape(split.in, merge.out)
@@ -93,6 +95,8 @@ For instance, a Source that just expose random numbers (it's useless in this cas
 val s = GraphDSL.create() { implicit builder =>
    val flow = builder.add(Flow[Double].map(identity)) // look the note below
    val ss = Source.fromIterator(() => Iterator.continually(math.random))
+   
+   import GraphDSL.Implicits._
    ss ~> flow
    SourceShape(flow.out)
 }
